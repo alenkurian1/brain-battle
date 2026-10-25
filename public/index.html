@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#5b4bdb">
+<title>Brain Battle — Multiplayer Quiz</title>
+<style>
+:root{--ink:#201b3a;--muted:#716b8a;--purple:#5b4bdb;--pink:#f05aa6;--cyan:#54d8e8;--gold:#ffcf56;--paper:#fff;--line:#e8e4f5}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:radial-gradient(ellipse at 10% 0%,#eeeaff 0,transparent 42%),radial-gradient(ellipse at 95% 25%,#ffe6f2 0,transparent 34%),#f8f7ff}
+button,input{font:inherit}button{cursor:pointer;border:0;font-weight:750;transition:transform .15s,filter .15s}button:hover{filter:brightness(1.04);transform:translateY(-1px)}button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.wrap{max-width:1080px;margin:auto;padding:26px 18px 54px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}.brand{display:flex;align-items:center;gap:12px;font-weight:950;font-size:clamp(1.25rem,3vw,1.8rem);letter-spacing:-.05em}.logo{width:48px;height:48px;display:grid;place-items:center;background:linear-gradient(135deg,var(--purple),#a45af2);border-radius:16px;color:white;font-size:25px;box-shadow:0 8px 22px #5b4bdb44}.pill{background:white;border:1px solid var(--line);padding:9px 13px;border-radius:999px;color:var(--muted);font-size:.85rem;font-weight:750}
+.hero{text-align:center;margin:32px auto 28px;max-width:690px}.eyebrow{display:inline-block;color:var(--purple);background:#eeebff;border-radius:999px;padding:7px 12px;font-size:.78rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.hero h1{font-size:clamp(2.4rem,7vw,4.7rem);line-height:.98;letter-spacing:-.07em;margin:17px 0 12px}.gradient{background:linear-gradient(90deg,var(--purple),#e34fa0);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);font-size:1.05rem;line-height:1.6;margin:0}
+.card{background:#ffffffed;border:1px solid #e8e3f6;border-radius:26px;box-shadow:0 18px 55px #39247a0c;padding:clamp(18px,4vw,30px);margin:18px 0}.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}.card h2{font-size:1.25rem;margin:0 0 7px;letter-spacing:-.03em}.sub{color:var(--muted);margin:0 0 20px;line-height:1.5;font-size:.94rem}.field{display:block;font-size:.82rem;font-weight:800;color:#595171;margin:14px 0 7px}.input{width:100%;border:1.5px solid var(--line);border-radius:14px;background:#fff;padding:13px 14px;outline:none;color:var(--ink)}.input:focus{border-color:var(--purple);box-shadow:0 0 0 3px #5b4bdb18}.btn{padding:13px 17px;border-radius:14px;background:var(--purple);color:#fff;box-shadow:0 8px 18px #5b4bdb2b}.btn.secondary{background:#f0edff;color:var(--purple);box-shadow:none}.btn.pink{background:linear-gradient(135deg,#ee56a4,#d83e82)}.btn.gold{background:var(--gold);color:#44350c;box-shadow:none}.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.btnrow .btn{flex:1}.features{display:grid;gap:13px}.feature{display:flex;gap:12px;align-items:center;background:#faf9ff;border:1px solid #efebfa;padding:13px;border-radius:16px}.feature .emoji{font-size:24px}.feature b{display:block;font-size:.94rem}.feature small{color:var(--muted)}
+.hidden{display:none!important}.room-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.room-code{display:inline-flex;gap:10px;align-items:center;background:#f0edff;border:1px dashed #b8adff;border-radius:14px;padding:10px 14px;font-weight:950;letter-spacing:.14em;font-size:1.15rem}.players{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:18px 0}.player{padding:14px;border:1px solid var(--line);border-radius:16px;background:#fff;display:flex;gap:10px;align-items:center;min-width:0}.avatar{width:38px;height:38px;display:grid;place-items:center;border-radius:13px;background:#f1edff;font-size:22px;flex-shrink:0}.player-name{font-weight:850;overflow-wrap:anywhere}.player-meta{color:var(--muted);font-size:.78rem;margin-top:3px}.score{margin-left:auto;font-weight:950;color:var(--purple)}
+.status{padding:11px 14px;border-radius:13px;background:#f1efff;color:#5b4bdb;font-weight:750;font-size:.9rem;margin:12px 0}.status.error{background:#fff0f3;color:#b4234b}.status.ok{background:#e8fff6;color:#167b58}
+.question-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.category{color:var(--purple);background:#f0edff;padding:7px 11px;border-radius:999px;font-weight:850;font-size:.8rem}.timer{font-weight:950;color:#d7478d}.progress{height:8px;border-radius:99px;background:#eeeaf8;overflow:hidden;margin:16px 0 22px}.bar{height:100%;width:100%;background:linear-gradient(90deg,var(--purple),var(--pink));transition:width .2s linear}.question{font-size:clamp(1.45rem,4vw,2.15rem);letter-spacing:-.04em;line-height:1.15;margin:12px 0 20px}.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.answer{padding:17px;text-align:left;border:2px solid var(--line);background:#fff;border-radius:17px;min-height:68px;color:var(--ink);font-weight:800;display:flex;gap:12px;align-items:center}.answer .letter{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:#f2efff;color:var(--purple);flex-shrink:0}.answer.selected{border-color:var(--purple);background:#f3f0ff}.answer.correct{border-color:#30b886;background:#eafff5}.answer.wrong{border-color:#f18ba8;background:#fff0f4}.answer:disabled{opacity:1}.leader-row{display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid #f0edf8}.leader-row:last-child{border:0}.rank{font-weight:950;color:var(--muted);width:24px}.leader-row:first-child .rank{color:#d29b00}.leader-row .name{font-weight:850;flex:1}.leader-row .points{font-weight:950;color:var(--purple)}.center{text-align:center}.big-emoji{font-size:56px}.foot{text-align:center;color:#928ba7;font-size:.8rem;margin-top:26px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.hero{margin-top:22px}.answers{grid-template-columns:1fr}.top{align-items:flex-start}.card{border-radius:21px}.wrap{padding:18px 12px 40px}.room-code{font-size:1rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><div class="brand"><div class="logo">🧠</div><span>Brain <span class="gradient">Battle</span></span></div><div class="pill" id="connection">Connecting…</div></header>
+  <section class="hero"><span class="eyebrow">⚡ Think fast. Score big.</span><h1>Ready to test<br><span class="gradient">your brain?</span></h1><p>A live quiz battle for friends. Create a room, invite your crew, and race to the top of the leaderboard.</p></section>
+  <div id="notice" class="status hidden" role="status"></div>
+  <section id="home" class="grid">
+    <div class="card"><h2>Jump into the battle</h2><p class="sub">Pick a nickname, then create a room or join a friend's room code.</p>
+      <label class="field" for="nickname">Your nickname</label><input id="nickname" class="input" maxlength="16" placeholder="e.g. Quiz Wizard" autocomplete="nickname">
+      <div class="btnrow"><button id="create" class="btn">✨ Create room</button></div>
+      <div style="text-align:center;color:#a49db7;font-size:.8rem;margin:15px 0">— OR JOIN YOUR FRIENDS —</div>
+      <label class="field" for="roomcode">Room code</label><input id="roomcode" class="input" maxlength="4" placeholder="ABCD" autocapitalize="characters">
+      <div class="btnrow"><button id="join" class="btn pink">Join room →</button></div>
+    </div>
+    <div class="card"><h2>Small room. Big brain energy.</h2><p class="sub">Up to 8 players compete in quick-fire multiple choice rounds.</p><div class="features">
+      <div class="feature"><span class="emoji">🚀</span><div><b>Speed counts</b><small>Correct answers earn a speed bonus.</small></div></div>
+      <div class="feature"><span class="emoji">🏆</span><div><b>Live leaderboard</b><small>Watch the rankings update as you play.</small></div></div>
+      <div class="feature"><span class="emoji">🔗</span><div><b>Easy invites</b><small>Share a four-letter room code.</small></div></div>
+      <div class="feature"><span class="emoji">🔁</span><div><b>Instant rematch</b><small>Keep your crew together for another round.</small></div></div>
+    </div></div>
+  </section>
+  <section id="lobby" class="card hidden">
+    <div class="room-head"><div><h2>Waiting room</h2><p class="sub" style="margin:5px 0 0">Invite your friends. The host can start when at least two players are connected.</p></div><div class="room-code">ROOM <span id="codeLabel">----</span> <button id="copy" class="btn secondary" style="padding:7px 10px;font-size:.8rem">Copy invite</button></div></div>
+    <div id="playersLobby" class="players"></div><div class="status" id="lobbyStatus">Waiting for players…</div>
+    <div class="btnrow"><button id="ready" class="btn secondary">✓ I'm ready</button><button id="start" class="btn" disabled>Start battle</button><button id="leave" class="btn secondary">Leave room</button></div>
+  </section>
+  <section id="game" class="card hidden">
+    <div class="question-top"><span class="category" id="category">GENERAL</span><span class="pill">Question <b id="qnum">1</b>/<b id="qtotal">8</b></span><span class="timer" id="timer">15s</span></div>
+    <div class="progress"><div id="bar" class="bar"></div></div><h2 class="question" id="question">Question text</h2>
+    <div id="answers" class="answers"></div><div id="answerStatus" class="status">Choose your answer!</div>
+    <h2 style="margin-top:28px">🏆 Live leaderboard</h2><div id="leadersGame"></div>
+  </section>
+  <section id="reveal" class="card hidden">
+    <div class="center"><div class="big-emoji" id="revealEmoji">🎯</div><h2 id="revealTitle">Answer revealed!</h2><p class="sub" id="revealSub">Here's how the round went.</p></div>
+    <div id="revealAnswers" class="answers"></div><h2 style="margin-top:26px">🏆 Live leaderboard</h2><div id="leadersReveal"></div>
+  </section>
+  <section id="final" class="card hidden">
+    <div class="center"><div class="big-emoji">🏆</div><span class="eyebrow">Battle complete</span><h2 style="font-size:2rem;margin:14px 0 8px">Brains were battled.</h2><p class="sub">Here are the final standings. Ready for a rematch?</p></div>
+    <div id="leadersFinal"></div><div class="btnrow"><button id="rematch" class="btn pink">🔁 Rematch</button><button id="backLobby" class="btn secondary">Back to lobby</button></div>
+  </section>
+  <footer class="foot">Made for friendly competition · No account needed · 2–8 players</footer>
+</div>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const screens=['home','lobby','game','reveal','final'];
+let socket=null,room=null,playerId=sessionStorage.getItem('bb-player-id')||null,roomCode=null,hostId=null,answered=false,readyState=false,clockOffset=0,timerLoop=null,inviteCode=null;
+function screen(name){screens.forEach(s=>$(s).classList.toggle('hidden',s!==name))}
+function notice(msg,type=''){const n=$('notice');n.textContent=msg;n.className='status'+(type?' '+type:'');n.classList.remove('hidden')}
+function clearNotice(){$('notice').classList.add('hidden')}
+function send(obj){if(!socket||socket.readyState!==WebSocket.OPEN){notice('Not connected yet. Wait a moment and try again.','error');return}socket.send(JSON.stringify(obj))}
+function connect(){
+ const proto=location.protocol==='https:'?'wss:':'ws:';socket=new WebSocket(proto+'//'+location.host);
+ socket.onopen=()=>{$('connection').textContent='● Connected';$('connection').style.color='#16805c';clearNotice();const params=new URLSearchParams(location.search);const c=(params.get('room')||'').toUpperCase();if(c&&playerId){$('roomcode').value=c;const n=sessionStorage.getItem('bb-name');if(n)$('nickname').value=n;send({t:'join',code:c,name:$('nickname').value,id:playerId})}};
+ socket.onclose=()=>{$('connection').textContent='Reconnecting…';$('connection').style.color='#c27b12';setTimeout(connect,1800)};
+ socket.onerror=()=>{$('connection').textContent='Connection issue'};
+ socket.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch{return}
+   if(m.t==='error'){notice(m.msg||'Something went wrong.','error');return}
+   if(m.t==='joined'){playerId=m.id;roomCode=m.code;sessionStorage.setItem('bb-player-id',playerId);history.replaceState({},'',location.pathname+'?room='+encodeURIComponent(roomCode));clearNotice();return}
+   if(m.t==='state'){clockOffset=(m.now||Date.now())-Date.now();room=m.room;roomCode=room.code;hostId=room.host;render(m.you);return}
+ };
+}
+function nickname(){const n=$('nickname').value.trim().slice(0,16);if(!n){notice('Enter a nickname first.','error');$('nickname').focus();return null}sessionStorage.setItem('bb-name',n);return n}
+$('create').onclick=()=>{const n=nickname();if(n)send({t:'create',name:n})};
+$('join').onclick=()=>{const n=nickname(),c=$('roomcode').value.trim().toUpperCase();if(!n)return;if(!/^[A-Z]{4}$/.test(c)){notice('Enter the four-letter room code.','error');return}send({t:'join',code:c,name:n,id:playerId})};
+$('roomcode').addEventListener('input',e=>e.target.value=e.target.value.toUpperCase().replace(/[^A-Z]/g,'').slice(0,4));
+$('copy').onclick=async()=>{const url=location.origin+location.pathname+'?room='+roomCode;try{await navigator.clipboard.writeText(url);notice('Invite link copied! Share it with your friends.','ok')}catch{prompt('Copy this invite link:',url)}};
+$('ready').onclick=()=>{send({t:'ready'});readyState=!readyState;$('ready').textContent=readyState?'✓ Ready! Click to undo':'✓ I\\'m ready'};
+$('start').onclick=()=>send({t:'start'});
+$('leave').onclick=()=>{playerId=null;room=null;roomCode=null;sessionStorage.removeItem('bb-player-id');history.replaceState({},'',location.pathname);screen('home');notice('You left the room.','ok');if(socket)socket.close()};
+$('rematch').onclick=()=>send({t:'rematch'});
+$('backLobby').onclick=()=>screen('lobby');
+function render(you){
+ const mine=room.players.find(p=>p.id===you);if(mine&&mine.name){sessionStorage.setItem('bb-name',mine.name);$('nickname').value=mine.name}
+ $('codeLabel').textContent=room.code;$('start').disabled=room.host!==you||room.players.filter(p=>p.on).length<2||room.phase!=='lobby';$('start').textContent=room.host===you?'Start battle':'Waiting for host';$('ready').disabled=room.phase!=='lobby';$('ready').textContent=mine&&mine.ready?'✓ Ready! Click to undo':'✓ I\\'m ready';
+ const lobby=$('playersLobby');lobby.innerHTML='';room.players.forEach(p=>lobby.append(playerCard(p,room.host)));
+ $('lobbyStatus').textContent=room.players.filter(p=>p.on).length+' player(s) connected · '+room.players.length+'/8 seats used';
+ if(room.phase==='lobby'){screen('lobby');return}
+ if(room.phase==='question'){screen('game');renderQuestion(room,you);renderLeaders($('leadersGame'));return}
+ if(room.phase==='reveal'){screen('reveal');renderReveal(room,you);renderLeaders($('leadersReveal'));return}
+ if(room.phase==='final'){screen('final');$('rematch').classList.toggle('hidden',room.host!==you);renderLeaders($('leadersFinal'));return}
+ screen('lobby');
+}
+function playerCard(p,host){const d=document.createElement('div');d.className='player';d.innerHTML='<div class="avatar"></div><div style="min-width:0"><div class="player-name"></div><div class="player-meta"></div></div><div class="score"></div>';d.querySelector('.avatar').textContent=p.av;d.querySelector('.player-name').textContent=p.name;d.querySelector('.player-meta').textContent=(p.id===host?'👑 Host · ':'')+(p.on?'Online':'Reconnecting')+(p.ready?' · Ready':'');d.querySelector('.score').textContent=p.score;return d}
+function renderLeaders(el){el.innerHTML='';room.players.slice().sort((a,b)=>b.score-a.score).forEach((p,i)=>{const d=document.createElement('div');d.className='leader-row';d.innerHTML='<span class="rank"></span><span class="avatar"></span><span class="name"></span><span class="points"></span>';d.querySelector('.rank').textContent=['🥇','🥈','🥉'][i]||('#'+(i+1));d.querySelector('.avatar').textContent=p.av;d.querySelector('.name').textContent=p.name;d.querySelector('.points').textContent=p.score.toLocaleString()+' pts';el.append(d)})}
+function renderQuestion(r,you){const q=r.q;if(!q)return;$('category').textContent=q.cat||'GENERAL';$('qnum').textContent=q.i;$('qtotal').textContent=q.n;$('question').textContent=q.text;answered=!!r.mine;$('answerStatus').textContent=answered?'Answer locked in! Waiting for other players…':'Choose one answer';$('answers').innerHTML='';q.opts.forEach((opt,i)=>{const b=document.createElement('button');b.className='answer'+(r.mine&&r.mine.i===i?' selected':'');b.disabled=answered;b.innerHTML='<span class="letter"></span><span></span>';b.querySelector('.letter').textContent=String.fromCharCode(65+i);b.querySelectorAll('span')[1].textContent=opt;b.onclick=()=>{if(answered)return;answered=true;$('answerStatus').textContent='Answer submitted!';$('answers').querySelectorAll('button').forEach(x=>x.disabled=true);b.classList.add('selected');send({t:'answer',i})};$('answers').append(b)});if(timerLoop)clearInterval(timerLoop);const tick=()=>{const left=Math.max(0,(q.endsAt-(Date.now()+clockOffset))/1000);$('timer').textContent=left.toFixed(1)+'s';$('bar').style.width=(left/15*100)+'%'};tick();timerLoop=setInterval(tick,100)}
+function renderReveal(r,you){const q=r.q;if(!q)return;$('revealEmoji').textContent=r.mine&&r.mine.pts>0?'🎉':'🎯';$('revealTitle').textContent=r.mine&&r.mine.pts>0?'Correct answer!':'Round result';$('revealSub').textContent=r.mine?(r.mine.pts>0?'You earned '+r.mine.pts.toLocaleString()+' points.':'No points this round. Keep going!'):'Here is the correct answer.';$('revealAnswers').innerHTML='';q.opts.forEach((opt,i)=>{const d=document.createElement('div');d.className='answer '+(i===r.correct?'correct':'');d.innerHTML='<span class="letter"></span><span></span>';d.querySelector('.letter').textContent=String.fromCharCode(65+i);d.querySelectorAll('span')[1].textContent=opt+(i===r.correct?'  ✓ Correct':'');$('revealAnswers').append(d)})}
+connect();
+})();
+</script>
+</body>
+</html>
